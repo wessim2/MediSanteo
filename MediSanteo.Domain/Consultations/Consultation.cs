@@ -1,4 +1,5 @@
 ﻿using MediSanteo.Domain.Abstractions;
+using MediSanteo.Domain.Consultations.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,8 @@ namespace MediSanteo.Domain.Consultations
             this.CreatedOnUtc = createdOnUtc;
             this.Price = price;
         }
+
+        private Consultation() { }
         public Guid PatientId { get; private set; }
         public Guid DoctorId { get; private set; }
         public ConsultationStatus Status { get; private set; }
@@ -41,7 +44,7 @@ namespace MediSanteo.Domain.Consultations
             DateTime appointmentTime,
             Money price)
         {
-            var consultation = new Consultation(new Guid(), patientId, doctorId, ConsultationStatus.Pending ,appointmentTime ,DateTime.Now, price);
+            var consultation = new Consultation(new Guid(), patientId, doctorId, ConsultationStatus.Pending ,appointmentTime ,DateTime.UtcNow, price);
 
             consultation.RaiseDomainEvent(new ConsultationReservedDomainEvent(consultation.Id));
             

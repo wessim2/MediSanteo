@@ -26,11 +26,11 @@ namespace MediSanteo.Domain.Patients
             Medications = mediciations;
         }
 
+        private Patient() { }
         public FullName FullName { get; private set; }
         public Email Email { get; private set; }
         public BirthDate BirthDate { get; private set; }
         public List<VitalSigns> VitalSignHistory { get; private set; }
         public List<Medication> Medications { get; private set; }
-         public Age Age { get; private set; }
     }
 }

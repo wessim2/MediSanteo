@@ -2,12 +2,23 @@
 using MediSanteo.Application.Abstractions.Data;
 using MediSanteo.Application.Abstractions.Messaging;
 using MediSanteo.Domain.Abstractions;
+using MediSanteo.Domain.Consultations;
 
 
 namespace MediSanteo.Application.Consultations.GetConsultation
 {
     public sealed class GetConsultationQueryHandler : IQueryHandler<GetConsultationQuery, ConsultationResponse>
     {
+        private static readonly int[] ConsultaionStatuses =
+        {
+        (int)ConsultationStatus.Completed,
+        (int)ConsultationStatus.Rescheduled,
+        (int)ConsultationStatus.Cancelled,
+        (int)ConsultationStatus.Pending,
+        (int)ConsultationStatus.Confirmed,
+
+        };
+
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
         public GetConsultationQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
@@ -20,10 +31,15 @@ namespace MediSanteo.Application.Consultations.GetConsultation
             using var connection = _sqlConnectionFactory.CreateConnection();
 
             var sql = """
-                SELECT 
-                    id as Id,
-                    status as Status
-                FROM consultations
+                SELECT
+                id as Id,
+                patient_id as PatientId,
+                doctor_id as DoctorId,
+                status as Status,
+                appointment_time as AppointmentTime,
+                price_amount as PriceAmount,
+                price_currency as PriceCurrency
+                FROM public.consultations
                 WHERE id = @ConsultationId
                 """;
 

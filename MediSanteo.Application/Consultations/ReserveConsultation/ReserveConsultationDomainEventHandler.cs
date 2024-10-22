@@ -28,7 +28,7 @@ namespace MediSanteo.Application.Consultations.ReserveConsultation
 
         public async Task Handle(ConsultationReservedDomainEvent notification, CancellationToken cancellationToken)
         {
-            var consultation = await _consultationRepository.GetConsultationById(notification.id, cancellationToken);
+            var consultation = await _consultationRepository.GetByIdAsync(notification.id, cancellationToken);
             
             if (consultation == null)
             {

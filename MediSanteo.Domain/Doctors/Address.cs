@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Santéo.Domain.Doctors
+namespace MediSanteo.Domain.Doctors
 {
     public record Address
     (string Street,

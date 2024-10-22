@@ -10,7 +10,7 @@ namespace MediSanteo.Domain.Consultations
     {
         public static readonly Currency Tnd = new("TND");
 
-        private Currency(string code) => Code = code;
+        public Currency(string code) => Code = code;
         public string Code { get; init; }
 
         public static Currency FromCode(string code)

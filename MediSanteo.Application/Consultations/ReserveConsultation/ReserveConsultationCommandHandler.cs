@@ -1,14 +1,10 @@
-﻿using MediSanteo.Application.Abstractions.Messaging;
+﻿using MediSanteo.Application.Abstractions.Clock;
+using MediSanteo.Application.Abstractions.Messaging;
 using MediSanteo.Application.Exceptions;
 using MediSanteo.Domain.Abstractions;
 using MediSanteo.Domain.Consultations;
 using MediSanteo.Domain.Doctors;
 using MediSanteo.Domain.Patients;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MediSanteo.Application.Consultations.ReserveConsultation
 {
@@ -18,17 +14,20 @@ namespace MediSanteo.Application.Consultations.ReserveConsultation
         private readonly IPatientRepository _patientRepository;
         private readonly IConsultationRepository _consultationRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
         public ReserveConsultationCommandHandler(
             IConsultationRepository consultationRepository,
             IDoctorRepository doctorRepository,
             IPatientRepository patientRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IDateTimeProvider dateTimeProvider)
         {
             _consultationRepository = consultationRepository;
             _doctorRepository = doctorRepository;
             _patientRepository = patientRepository;
             _unitOfWork = unitOfWork;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<Result<Guid>> Handle(ReserveConsultationCommand request, CancellationToken cancellationToken)
@@ -61,6 +60,7 @@ namespace MediSanteo.Application.Consultations.ReserveConsultation
                 request.appointmentTime,
                 request.price
                 );
+
 
             _consultationRepository.Add(consultation);
 

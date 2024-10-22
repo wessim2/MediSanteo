@@ -19,10 +19,6 @@ namespace MediSanteo.Infrastructure.Configurations
 
             builder.HasKey(consultation => consultation.Id);
 
-            builder.Property(consultation => consultation.Status)
-                .HasConversion(value => value.ToString(),
-                value => (ConsultationStatus)Enum.Parse(typeof(ConsultationStatus), value));
-
             builder.Property(consultation => consultation.AppointmentTime)
                 .IsRequired();
 

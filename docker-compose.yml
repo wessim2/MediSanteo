@@ -1,0 +1,38 @@
+
+services:
+  medisanteo.api:
+    image: ${DOCKER_REGISTRY-}medisanteo
+    container_name: MediSanteo.Api
+    build:
+      context: .
+      dockerfile: MediSanteo/Dockerfile
+    depends_on:
+      - medisanteo-db
+
+  medisanteo-db:
+    image: postgres:latest
+    container_name: MediSanteo.Db
+    environment:
+      - POSTGRES_DB=medisanteo
+      - POSTGRES_USER=POSTGRES 
+      - POSTGRES_PASSWORD=POSTGRES
+    volumes:
+      - ./.containers/database:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  medisanteo-idp:
+    image: quay.io/keycloak/keycloak:23.0.6
+    container_name: MediSanteo.Identity
+    command: start-dev --import-realm
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KEYCLOAK_IMPORT=/tmp/medisanteo-realm-export.json
+    volumes:
+      - ./.containers/identity:/opt/keycloak/data
+      - ./.files/medisanteo-realm-export.json:/opt/keycloak/data/import/realm.json 
+    ports:
+      - 18080:8080     
+      
+    

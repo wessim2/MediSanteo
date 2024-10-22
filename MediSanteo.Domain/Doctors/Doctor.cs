@@ -14,6 +14,8 @@ namespace MediSanteo.Domain.Doctors
             PhoneNumber = phoneNumber;
             Address = address;
         }
+
+        private Doctor() { }
         public FullName FullName { get; private set; }
         public Email Email { get; private set; }
         public Speciality Speciality { get; private set; }

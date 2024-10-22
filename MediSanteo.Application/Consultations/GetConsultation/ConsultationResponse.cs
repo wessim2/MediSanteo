@@ -11,7 +11,7 @@ namespace MediSanteo.Application.Consultations.GetConsultation
     {
         public Guid PatientId { get; init; }
         public Guid DoctorId { get; init; }
-        public int Status { get; init; }
+        public ConsultationStatus Status { get; init; }
         public DateTime AppointmentTime { get; init; }
         public decimal PriceAmount { get; init; }
         public string PriceCurrency { get; init; }
