@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using MediSanteo.Application.Users.GetLoggedInUser;
 using MediSanteo.Application.Users.LoginUser;
 using MediSanteo.Application.Users.RegisterUser;
+using MediSanteo.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +18,17 @@ namespace MediSanteo.Controllers.Users
         public UserController(ISender sender)
         {
             _sender = sender;
+        }
+
+        [HttpGet("me")]
+        [HasPermission(Permissions.UsersRead)]
+        public async Task<IActionResult> GetLoggedInUser(CancellationToken cancellationToken)
+        {
+            var query = new GetLoggedInUserQuery();
+
+            var result = await _sender.Send(query,cancellationToken);
+
+            return Ok(result.Value);
         }
 
         [AllowAnonymous]
