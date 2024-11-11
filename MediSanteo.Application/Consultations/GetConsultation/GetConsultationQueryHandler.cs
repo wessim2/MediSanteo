@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using MediSanteo.Application.Abstractions.Authentication;
 using MediSanteo.Application.Abstractions.Data;
 using MediSanteo.Application.Abstractions.Messaging;
 using MediSanteo.Domain.Abstractions;
@@ -20,10 +21,12 @@ namespace MediSanteo.Application.Consultations.GetConsultation
         };
 
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
+        private readonly IUserContext _userContext;
 
-        public GetConsultationQueryHandler(ISqlConnectionFactory sqlConnectionFactory)
+        public GetConsultationQueryHandler(ISqlConnectionFactory sqlConnectionFactory, IUserContext userContext)
         {
             _sqlConnectionFactory = sqlConnectionFactory;
+            _userContext = userContext;
         }
 
         public async Task<Result<ConsultationResponse>> Handle(GetConsultationQuery request, CancellationToken cancellationToken)
@@ -50,6 +53,11 @@ namespace MediSanteo.Application.Consultations.GetConsultation
                     request.ConsultationId,
                 }
                 );
+
+            if ( consultation == null || consultation.PatientId != _userContext.UserId)
+            {
+                return Result.Failure<ConsultationResponse>(ConsultationErrors.NotFound);
+            }
 
             return consultation;
         }

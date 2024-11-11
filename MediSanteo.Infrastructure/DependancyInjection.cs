@@ -18,6 +18,8 @@ using MediSanteo.Infrastructure.Authentication;
 using MediSanteo.Application.Abstractions.Authentication;
 using Microsoft.Extensions.Options;
 using MediSanteo.Domain.Users;
+using MediSanteo.Infrastructure.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace MediSanteo.Infrastructure
@@ -33,7 +35,7 @@ namespace MediSanteo.Infrastructure
 
             AddPersistence(services,configuration);
             AddAuthentication(services,configuration);
-           
+            AddAuthorization(services);
             return services;
         }
         public static void AddPersistence(IServiceCollection services, IConfiguration configuration)
@@ -84,6 +86,18 @@ namespace MediSanteo.Infrastructure
 
                 httpClient.BaseAddress = new Uri(keycloakOptions.TokenUrl);
             });
+            services.AddHttpContextAccessor();
+
+            services.AddScoped<IUserContext, UserContext>();
+
+        }
+
+        public static void AddAuthorization(IServiceCollection services)
+        {
+            services.AddScoped<AuthorizationService>();
+            services.AddTransient<Microsoft.AspNetCore.Authentication.IClaimsTransformation, CustomClaimTransformation>();
+            services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
+            services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
         }
     }
 }
