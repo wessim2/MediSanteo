@@ -22,6 +22,8 @@ namespace MediSanteo.Infrastructure.Configurations
                 .UsingEntity<RolePermission>();
 
             builder.HasData(Role.Registered);
+            builder.HasData(Role.Patient);
+            builder.HasData(Role.Doctor);
         }
     }
 }

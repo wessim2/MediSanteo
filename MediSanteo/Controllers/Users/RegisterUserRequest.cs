@@ -1,9 +1,10 @@
 ﻿namespace MediSanteo.Controllers.Users
 {
     public record RegisterUserRequest(
-        string firstName,
-        string lastName,
-        string email,
-        string password
+        string FirstName,
+        string LastName,
+        string Email,
+        string Password,
+        string Role
         );
 }

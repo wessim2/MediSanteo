@@ -12,5 +12,17 @@ namespace MediSanteo.Domain.Users
             "User.InvalidCredentials",
             "Credentials are invalid."
             );
+        public static Error NotDoctor = new(
+            "User.NotDoctor",
+            "This User is not a doctor."
+            );
+        public static Error NotPatient = new(
+            "User.NotPatient",
+            "This User is not a patient."
+            );
+        public static Error InvalidRole = new(
+        "User.InvalidRole",
+        "Role is invalid."
+        );
     }
 }

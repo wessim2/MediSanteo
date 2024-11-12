@@ -1,12 +1,7 @@
 ﻿using MediSanteo.Domain.Abstractions;
-using MediSanteo.Domain.Patients;
 using MediSanteo.Domain.Shared;
 using MediSanteo.Domain.Users.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace MediSanteo.Domain.Users
 {
@@ -28,13 +23,35 @@ namespace MediSanteo.Domain.Users
         public string IdentityId { get; private set; }
         public IReadOnlyCollection<Role> Roles => _roles.ToList();
 
-        public static User Create(FirstName firstName,LastName lastName, Email email)
+        public static User CreatePatient(FirstName firstName,LastName lastName, Email email)
         {
             var user = new User(Guid.NewGuid(), firstName, lastName, email);
 
             user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
 
-            user._roles.Add(Role.Registered);
+            user._roles.Add(Role.Patient);
+
+            return user;
+        }
+
+        public static User CreateDoctor(FirstName firstName, LastName lastName, Email email)
+        {
+            var user = new User(Guid.NewGuid(), firstName, lastName, email);
+
+            user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
+
+            user._roles.Add(Role.Doctor);
+
+            return user;
+        }
+
+        public static User CreateAssistant(FirstName firstName, LastName lastName, Email email)
+        {
+            var user = new User(Guid.NewGuid(), firstName, lastName, email);
+
+            user.RaiseDomainEvent(new UserCreatedDomainEvent(user.Id));
+
+            user._roles.Add(Role.Assistant);
 
             return user;
         }

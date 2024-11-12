@@ -39,10 +39,11 @@ namespace MediSanteo.Controllers.Users
             ) 
         {
             var command = new RegisterUserCommand(
-                request.firstName,
-                request.lastName,
-                request.email,
-                request.password
+                request.FirstName,
+                request.LastName,
+                request.Email,
+                request.Password,
+                request.Role
                 );        
 
             var result = await _sender.Send(command,cancellationToken);
