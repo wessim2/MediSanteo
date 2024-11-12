@@ -188,6 +188,16 @@ namespace MediSanteo.Infrastructure.Migrations
                         {
                             Id = 1,
                             Name = "Registered"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Patient"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Doctor"
                         });
                 });
 

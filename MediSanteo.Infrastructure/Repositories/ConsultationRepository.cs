@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MediSanteo.Domain.Consultations;
-using MediSanteo.Domain.Doctors;
-using MediSanteo.Infrastructure.Repositories;
+using MediSanteo.Domain.Users;
 
 namespace MediSanteo.Infrastructure.Repositories
 {
@@ -16,7 +15,7 @@ namespace MediSanteo.Infrastructure.Repositories
         {
         }
 
-        public async Task<bool> IsOverlaping(Doctor doctor, DateTime appointmentTime, CancellationToken cancellationToken)
+        public async Task<bool> IsOverlaping(User doctor, DateTime appointmentTime, CancellationToken cancellationToken)
         {
             return await DbContext.Set<Consultation>()
                 .AnyAsync(consultation =>

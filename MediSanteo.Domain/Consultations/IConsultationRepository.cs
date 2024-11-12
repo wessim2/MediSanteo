@@ -1,4 +1,4 @@
-﻿using MediSanteo.Domain.Doctors;
+﻿using MediSanteo.Domain.Users;
 
 namespace MediSanteo.Domain.Consultations
 {
@@ -7,6 +7,6 @@ namespace MediSanteo.Domain.Consultations
         Task<Consultation?> GetByIdAsync(Guid id,CancellationToken cancellationToken);
         void Add(Consultation consultation);
 
-        Task<bool> IsOverlaping(Doctor doctor, DateTime appointmentTime, CancellationToken cancellationToken);
+        Task<bool> IsOverlaping(User doctor, DateTime appointmentTime, CancellationToken cancellationToken);
     }
 }

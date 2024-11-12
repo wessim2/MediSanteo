@@ -5,6 +5,7 @@ using MediSanteo.Domain.Abstractions;
 using MediSanteo.Domain.Consultations;
 using MediSanteo.Domain.Doctors;
 using MediSanteo.Domain.Patients;
+using MediSanteo.Domain.Users;
 
 namespace MediSanteo.Application.Consultations.ReserveConsultation
 {
@@ -15,35 +16,47 @@ namespace MediSanteo.Application.Consultations.ReserveConsultation
         private readonly IConsultationRepository _consultationRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly IUserRepository _userRepository;
 
         public ReserveConsultationCommandHandler(
             IConsultationRepository consultationRepository,
             IDoctorRepository doctorRepository,
             IPatientRepository patientRepository,
             IUnitOfWork unitOfWork,
-            IDateTimeProvider dateTimeProvider)
+            IDateTimeProvider dateTimeProvider,
+            IUserRepository userRepository)
         {
             _consultationRepository = consultationRepository;
             _doctorRepository = doctorRepository;
             _patientRepository = patientRepository;
             _unitOfWork = unitOfWork;
             _dateTimeProvider = dateTimeProvider;
+            _userRepository = userRepository;
         }
 
         public async Task<Result<Guid>> Handle(ReserveConsultationCommand request, CancellationToken cancellationToken)
         {
-            var doctor = await _doctorRepository.GetByIdAsync(request.doctorId, cancellationToken);
+            var doctor = await _userRepository.GetByIdAsync(request.doctorId, cancellationToken);
 
             if (doctor is null)
             {
-                return Result.Failure<Guid>(DoctorErrors.NotFound);
+                return Result.Failure<Guid>(UserErrors.NotFound);
             }
 
-            var patient = await _patientRepository.GetByIdAsync(request.patientId, cancellationToken);
+            if ( doctor.Roles.Contains(Role.Doctor) )
+            {
+                return Result.Failure<Guid>(UserErrors.NotDoctor);
+            }
+
+            var patient = await _userRepository.GetByIdAsync(request.patientId, cancellationToken);
 
             if (patient is null)
             {
-                return Result.Failure<Guid>(PatientErrors.NotFound);
+                return Result.Failure<Guid>(UserErrors.NotFound);
+            }
+            if (patient.Roles.Contains(Role.Patient))
+            {
+                return Result.Failure<Guid>(UserErrors.NotPatient);
             }
 
             if (await _consultationRepository.IsOverlaping(doctor, request.appointmentTime, cancellationToken))

@@ -25,23 +25,45 @@ namespace MediSanteo.Application.Users.RegisterUser
 
         public async Task<Result<Guid>> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
-            var user = User.Create(
-                new FirstName(request.FirstName),
-                new LastName(request.LastName),
-                new Domain.Shared.Email(request.Email));
-
-            var identityId = await _authenticationService.RegisterAsync(
-                user, 
+            User user;
+            switch (request.Role.ToLower())
+            {
+                case "patient":
+                    user = User.CreatePatient(
+                         new FirstName(request.FirstName),
+                         new LastName(request.LastName),
+                         new Domain.Shared.Email(request.Email));
+                    break;
+                case "doctor":
+                    user = User.CreatePatient(
+                        new FirstName(request.FirstName),
+                        new LastName(request.LastName),
+                        new Domain.Shared.Email(request.Email));
+                    break;
+                default:
+                    return Result.Failure<Guid>(UserErrors.InvalidRole);
+            }
+            try
+            {
+                var identityId = await _authenticationService.RegisterAsync(
+                user,
                 request.Password,
-                cancellationToken); 
+                cancellationToken);
 
-            user.SetIdentityId(identityId);
+                user.SetIdentityId(identityId);
 
-            _userRepository.Add(user);
+                _userRepository.Add(user);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return user.Id;
+                return user.Id;
+            }catch(Exception ex) 
+            {
+                Console.WriteLine(ex.Message);
+                return Result.Failure<Guid>(UserErrors.InvalidCredentials);
+            }
+
+            
         }
     }
 }
