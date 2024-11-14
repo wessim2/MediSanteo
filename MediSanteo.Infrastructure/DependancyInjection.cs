@@ -6,8 +6,6 @@ using MediSanteo.Application.Abstractions.Data;
 using MediSanteo.Application.Abstractions.Email;
 using MediSanteo.Domain.Abstractions;
 using MediSanteo.Domain.Consultations;
-using MediSanteo.Domain.Doctors;
-using MediSanteo.Domain.Patients;
 using MediSanteo.Infrastructure.Data;
 using MediSanteo.Infrastructure.Email;
 using MediSanteo.Infrastructure.Repositories;
@@ -20,6 +18,7 @@ using Microsoft.Extensions.Options;
 using MediSanteo.Domain.Users;
 using MediSanteo.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using MediSanteo.Domain.Prescription;
 
 
 namespace MediSanteo.Infrastructure
@@ -49,8 +48,7 @@ namespace MediSanteo.Infrastructure
             });
 
             services.AddScoped<IConsultationRepository, ConsultationRepository>();
-            services.AddScoped<IDoctorRepository, DoctorRepository>();
-            services.AddScoped<IPatientRepository, PatientRepository>();
+            services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
 

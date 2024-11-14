@@ -2,28 +2,26 @@
 using MediSanteo.Application.Abstractions.Email;
 using MediSanteo.Domain.Consultations;
 using MediSanteo.Domain.Consultations.Events;
-using MediSanteo.Domain.Doctors;
-using MediSanteo.Domain.Patients;
+using MediSanteo.Domain.Users;
+
 
 namespace MediSanteo.Application.Consultations.ReserveConsultation
 {
     public sealed class ReserveConsultationDomainEventHandler : INotificationHandler<ConsultationReservedDomainEvent>
     {
         private readonly IConsultationRepository _consultationRepository;
-        private readonly IPatientRepository _patientRepository;
         private readonly IEmailService _emailService;
-        private readonly IDoctorRepository _doctorRepository;
+        private readonly IUserRepository _userRepository;
 
         public ReserveConsultationDomainEventHandler(
             IConsultationRepository consultationRepository,
-            IDoctorRepository doctorRepository,
-            IPatientRepository patientRepository,
-            IEmailService emailService)
+            IEmailService emailService,
+            IUserRepository userRepository)
         {
-            _doctorRepository = doctorRepository;
-            _patientRepository = patientRepository;
+
             _consultationRepository = consultationRepository;
             _emailService = emailService;
+            _userRepository = userRepository;
         }
 
         public async Task Handle(ConsultationReservedDomainEvent notification, CancellationToken cancellationToken)
@@ -35,14 +33,14 @@ namespace MediSanteo.Application.Consultations.ReserveConsultation
                 return;
             }
 
-            var patient = await _patientRepository.GetByIdAsync(consultation.PatientId, cancellationToken);
+            var patient = await _userRepository.GetByIdAsync(consultation.PatientId, cancellationToken);
 
             if( patient is null)
             {
                 return;
             }
 
-            var doctor = await _doctorRepository.GetByIdAsync(consultation.DoctorId, cancellationToken);
+            var doctor = await _userRepository.GetByIdAsync(consultation.DoctorId, cancellationToken);
 
             if( doctor is null)
             {

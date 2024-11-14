@@ -1,13 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MediSanteo.Domain.Consultations;
-using MediSanteo.Domain.Doctors;
-using MediSanteo.Domain.Patients;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MediSanteo.Domain.Users;
+
 
 namespace MediSanteo.Infrastructure.Configurations
 {
@@ -29,10 +24,10 @@ namespace MediSanteo.Infrastructure.Configurations
             });
                
 
-            builder.HasOne<Patient>().WithMany()
+            builder.HasOne<User>().WithMany()
                 .HasForeignKey(consulation => consulation.PatientId);
 
-            builder.HasOne<Doctor>().WithMany()
+            builder.HasOne<User>().WithMany()
                 .HasForeignKey(consultation => consultation.DoctorId);
 
             builder.Property<uint>("Version").IsRowVersion();

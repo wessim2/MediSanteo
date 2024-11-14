@@ -1,18 +1,19 @@
 ﻿using MediSanteo.Domain.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace MediSanteo.Domain.Medications
 {
-    public class Medication : Entity
+    public sealed class Medication : Entity
     {
+        public Medication(Name Name,Description Description,Dosage Dosage)
+        {
+            this.Name = Name;
+            this.Description = Description; 
+            this.Dosage = Dosage; 
+        }
+        private Medication() { }
         public Name Name { get; set; }
         public Description Description { get; set; }
         public Dosage Dosage { get; set; }
-
-
     }
 }

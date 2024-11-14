@@ -3,16 +3,14 @@ using MediSanteo.Application.Abstractions.Messaging;
 using MediSanteo.Application.Exceptions;
 using MediSanteo.Domain.Abstractions;
 using MediSanteo.Domain.Consultations;
-using MediSanteo.Domain.Doctors;
-using MediSanteo.Domain.Patients;
+
 using MediSanteo.Domain.Users;
 
 namespace MediSanteo.Application.Consultations.ReserveConsultation
 {
     internal sealed class ReserveConsultationCommandHandler : ICommandHandler<ReserveConsultationCommand, Guid>
     {
-        private readonly IDoctorRepository _doctorRepository;
-        private readonly IPatientRepository _patientRepository;
+
         private readonly IConsultationRepository _consultationRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IDateTimeProvider _dateTimeProvider;
@@ -20,15 +18,11 @@ namespace MediSanteo.Application.Consultations.ReserveConsultation
 
         public ReserveConsultationCommandHandler(
             IConsultationRepository consultationRepository,
-            IDoctorRepository doctorRepository,
-            IPatientRepository patientRepository,
             IUnitOfWork unitOfWork,
             IDateTimeProvider dateTimeProvider,
             IUserRepository userRepository)
         {
             _consultationRepository = consultationRepository;
-            _doctorRepository = doctorRepository;
-            _patientRepository = patientRepository;
             _unitOfWork = unitOfWork;
             _dateTimeProvider = dateTimeProvider;
             _userRepository = userRepository;
