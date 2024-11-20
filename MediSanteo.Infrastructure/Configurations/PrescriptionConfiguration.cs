@@ -25,7 +25,10 @@ namespace MediSanteo.Infrastructure.Configurations
                 .HasConversion(instructions => instructions.Value, value => new Instructions(value))
                 .IsRequired();
 
-            builder.HasMany<Medication>().WithMany().UsingEntity<PrescriptionMedicament>();
+            builder.HasMany(p => p.Medications)
+                .WithMany()
+                .UsingEntity<PrescriptionMedication>();   
+
         }
     }
 }

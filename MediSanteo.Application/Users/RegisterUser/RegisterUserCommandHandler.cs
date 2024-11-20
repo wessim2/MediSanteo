@@ -35,7 +35,7 @@ namespace MediSanteo.Application.Users.RegisterUser
                          new Domain.Shared.Email(request.Email));
                     break;
                 case "doctor":
-                    user = User.CreatePatient(
+                    user = User.CreateDoctor(
                         new FirstName(request.FirstName),
                         new LastName(request.LastName),
                         new Domain.Shared.Email(request.Email));

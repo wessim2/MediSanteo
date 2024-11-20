@@ -17,7 +17,7 @@ services:
       - POSTGRES_USER=POSTGRES 
       - POSTGRES_PASSWORD=POSTGRES
     volumes:
-      - ./.containers/database:/var/lib/postgresql/data
+      - ./.containers/database:/var/lib/postgresql/data1
     ports:
       - 5432:5432
 

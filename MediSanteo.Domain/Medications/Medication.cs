@@ -1,11 +1,13 @@
 ﻿using MediSanteo.Domain.Abstractions;
+using MediSanteo.Domain.Prescription;
+using MediSanteo.Domain.Users;
 
 
 namespace MediSanteo.Domain.Medications
 {
     public sealed class Medication : Entity
     {
-        public Medication(Name Name,Description Description,Dosage Dosage)
+        public Medication(Guid Id ,Name Name,Description Description,Dosage Dosage) : base(Id)
         {
             this.Name = Name;
             this.Description = Description; 
@@ -15,5 +17,6 @@ namespace MediSanteo.Domain.Medications
         public Name Name { get; set; }
         public Description Description { get; set; }
         public Dosage Dosage { get; set; }
+
     }
 }

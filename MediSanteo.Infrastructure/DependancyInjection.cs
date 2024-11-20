@@ -19,6 +19,7 @@ using MediSanteo.Domain.Users;
 using MediSanteo.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using MediSanteo.Domain.Prescription;
+using MediSanteo.Domain.Medications;
 
 
 namespace MediSanteo.Infrastructure
@@ -49,6 +50,7 @@ namespace MediSanteo.Infrastructure
 
             services.AddScoped<IConsultationRepository, ConsultationRepository>();
             services.AddScoped<IPrescriptionRepository, PrescriptionRepository>();
+            services.AddScoped<IMedicationRepository, MedicationRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
 

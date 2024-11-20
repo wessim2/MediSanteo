@@ -10,6 +10,7 @@ namespace MediSanteo.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Medication> builder)
         {
             builder.ToTable("medications");
+            builder.HasKey(x => x.Id);  
             builder.Property(m => m.Name)
                 .HasConversion(m => m.Value, value => new Name(value))
                 .IsRequired();

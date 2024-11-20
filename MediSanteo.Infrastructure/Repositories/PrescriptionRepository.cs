@@ -1,4 +1,5 @@
 ﻿using MediSanteo.Domain.Prescription;
+using MediSanteo.Domain.Users;
 
 
 namespace MediSanteo.Infrastructure.Repositories
@@ -7,6 +8,16 @@ namespace MediSanteo.Infrastructure.Repositories
     {
         public PrescriptionRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
+        }
+
+        public override void Add(Prescription prescription)
+        {
+            foreach (var medication in prescription.Medications)
+            {
+                DbContext.Attach(medication);
+            }
+
+            DbContext.Add(prescription);
         }
     }
 }

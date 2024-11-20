@@ -7,6 +7,6 @@ namespace MediSanteo.Application.Prescriptions.CreatePrescription
     public sealed record CreatePrescriptionCommand
     ( Guid PatientId,
       string Instructions,
-      ICollection<Medication> Medications
+      ICollection<Guid> Medications
      ) : ICommand<Guid>; 
 }

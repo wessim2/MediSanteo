@@ -1,8 +1,8 @@
 ﻿using Bogus;
 using Dapper;
 using MediSanteo.Application.Abstractions.Data;
-using MediSanteo.Domain.Doctors;
-using MediSanteo.Domain.Patients;
+using MediSanteo.Domain.Medications;
+
 
 namespace MediSanteo.Extentions
 {
@@ -18,25 +18,25 @@ namespace MediSanteo.Extentions
 
             var faker = new Faker();
 
-            List<object> doctors = new();
+            List<object> medications = new();
             for(var i = 0; i < 10; i++)
             {
-                doctors.Add(new
+                medications.Add(new
                 {
-                    Id = new Guid(),
-                    FirstName = faker.Person.FirstName,
-                    LastName = faker.Person.LastName,
-                    Email = faker.Person.Email,
-                    BirthDate = faker.Person.DateOfBirth,
+                    Id = Guid.NewGuid(), // Use Guid.NewGuid() to ensure uniqueness
+                    Name = faker.Commerce.ProductName(),
+                    Dosage = faker.PickRandom(new[] { 50, 100, 150, 200 }), // Replace with actual dosage values
+                    Description = faker.Lorem.Sentence(), // Generate a random sentence for the description
                 });
             }
+            
             const string sql = """
-            INSERT INTO public.patient
-            (id, full_name_first_name, full_name_last_name, email, birth_date)
-            VALUES(@Id, @FirstName, @LastName, @Email, @BirthDate);
+            INSERT INTO public.medications
+            (id, "name", description, dosage)
+            VALUES(@Id, @Name, @Description, @Dosage);
             """;
 
-            connection.Execute(sql, doctors);
+            connection.Execute(sql, medications);
         }
     }
 }

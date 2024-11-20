@@ -101,15 +101,8 @@ namespace MediSanteo.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<Guid?>("PrescriptionId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("prescription_id");
-
                     b.HasKey("Id")
                         .HasName("pk_medications");
-
-                    b.HasIndex("PrescriptionId")
-                        .HasDatabaseName("ix_medications_prescription_id");
 
                     b.ToTable("medications", (string)null);
                 });
@@ -143,23 +136,23 @@ namespace MediSanteo.Infrastructure.Migrations
                     b.ToTable("prescriptions", (string)null);
                 });
 
-            modelBuilder.Entity("MediSanteo.Domain.Prescription.PrescriptionMedicament", b =>
+            modelBuilder.Entity("MediSanteo.Domain.Prescription.PrescriptionMedication", b =>
                 {
-                    b.Property<Guid>("PrescriptionId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("prescription_id");
-
                     b.Property<Guid>("MedicationId")
                         .HasColumnType("uuid")
                         .HasColumnName("medication_id");
 
-                    b.HasKey("PrescriptionId", "MedicationId")
-                        .HasName("pk_prescription_medications");
+                    b.Property<Guid>("PrescriptionId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("prescription_id");
 
-                    b.HasIndex("MedicationId")
-                        .HasDatabaseName("ix_prescription_medications_medication_id");
+                    b.HasKey("MedicationId", "PrescriptionId")
+                        .HasName("pk_prescription_medication");
 
-                    b.ToTable("prescription_medications", (string)null);
+                    b.HasIndex("PrescriptionId")
+                        .HasDatabaseName("ix_prescription_medication_prescription_id");
+
+                    b.ToTable("prescription_medication", (string)null);
                 });
 
             modelBuilder.Entity("MediSanteo.Domain.Users.Permission", b =>
@@ -359,14 +352,6 @@ namespace MediSanteo.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MediSanteo.Domain.Medications.Medication", b =>
-                {
-                    b.HasOne("MediSanteo.Domain.Prescription.Prescription", null)
-                        .WithMany("Medications")
-                        .HasForeignKey("PrescriptionId")
-                        .HasConstraintName("fk_medications_prescription_prescription_id");
-                });
-
             modelBuilder.Entity("MediSanteo.Domain.Prescription.Prescription", b =>
                 {
                     b.HasOne("MediSanteo.Domain.Users.User", null)
@@ -377,21 +362,21 @@ namespace MediSanteo.Infrastructure.Migrations
                         .HasConstraintName("fk_prescriptions_user_patient_id");
                 });
 
-            modelBuilder.Entity("MediSanteo.Domain.Prescription.PrescriptionMedicament", b =>
+            modelBuilder.Entity("MediSanteo.Domain.Prescription.PrescriptionMedication", b =>
                 {
                     b.HasOne("MediSanteo.Domain.Medications.Medication", null)
                         .WithMany()
                         .HasForeignKey("MedicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_prescription_medications_medications_medication_id");
+                        .HasConstraintName("fk_prescription_medication_medications_medication_id");
 
                     b.HasOne("MediSanteo.Domain.Prescription.Prescription", null)
                         .WithMany()
                         .HasForeignKey("PrescriptionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_prescription_medications_prescriptions_prescription_id");
+                        .HasConstraintName("fk_prescription_medication_prescriptions_prescription_id");
                 });
 
             modelBuilder.Entity("MediSanteo.Domain.Users.RolePermission", b =>
@@ -426,11 +411,6 @@ namespace MediSanteo.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_role_user_user_users_id");
-                });
-
-            modelBuilder.Entity("MediSanteo.Domain.Prescription.Prescription", b =>
-                {
-                    b.Navigation("Medications");
                 });
 #pragma warning restore 612, 618
         }
